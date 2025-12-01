@@ -1,0 +1,10 @@
+# Carpetas que deben excluirse
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+*.db
