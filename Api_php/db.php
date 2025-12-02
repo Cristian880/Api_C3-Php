@@ -1,6 +1,6 @@
 <?php
 $severName = "(localdb)\MSSQLLocalDB";
-$database = "DBAPI"
+$database = "DBAPI";
 $authentication = "Windows Authentication";
 
 try {
