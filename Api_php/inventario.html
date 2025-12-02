@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Api Inventario php" content="width=device-width, initial-scale=1.0">
+    <title>Prueba web Service Inventario</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            margin: 6px;
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        pre {
+            background: #222;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+        input {
+            margin: 5px;
+            padding: 6px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba web Service Inventario</h1>
+
+    <h3>Operaciones</h3>
+
+    <button onclick="getall()"> GET: todos</button>
+    <input type="number" id="idGet" placeholder="ID a buscar">
+    <button onclick="getById()">GET: Por ID</button>
+    <br>
+
+    <input type="text" id="descPost" placeholder="Descripción">
+    <input type="number" id="cantPost" placeholder="Cantidad">
+    <button onclick="createItem()">POST: Crear</button>
+    <br>
+
+    <input type="number" id="idPut" placeholder="ID a modificar">
+    <input type="text" id="descPut" placeholder="Nueva Descripción">
+    <input type="number" id="cantPut" placeholder="Nueva Cantidad">
+    <button onclick="updateItem()">PUT: Actualizar</button>
+    <br>
+    <input type="number" id="idDelete" placeholder="ID a eliminar">
+    <button onclick="deleteItem()">DELETE: Eliminar</button>
+
+    <h3>Respuesta del servidor:</h3>
+    <pre id="output">Esperando solicitud...</pre>
+
+    <script>
+        const API_URL = 'http://localhost/Api C#&php/Api_php/index.php';
+        const output = document.getElementById('output');
+
+        function showResponse(data){
+            output.textContent = JSON.stringify(data, null, 2);
+        }
+        function getall(){
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(showResponse)
+                .catch(error => showResponse({error: error.message}));
+        }
+        function getById(){
+            const id = document.getElementById('idGet').value;
+            fetch(`${API_URL}?id=${id}`)
+                .then(res => res.json())
+                .then(showResponse)
+                .catch(error => showResponse({error: error.message}));
+        }
+        function createItem(){
+            const desc = document.getElementById('descPost').value;
+            const cant = document.getElementById('cantPost').value;
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({descripcion: desc, cantidad: parseInt(cant)})
+            })
+            .then(res => res.json())
+            .then(showResponse)
+            .catch(error => showResponse({error: error.message}));
+        }
+        function updateItem(){
+            const id = document.getElementById('idPut').value;
+            const desc = document.getElementById('descPut').value;
+            const cant = document.getElementById('cantPut').value;
+            fetch(API_URL, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: parseInt(id), descripcion: desc, cantidad: parseInt(cant)})
+            })
+            .then(res => res.json())
+            .then(showResponse)
+            .catch(error => showResponse({error: error.message}));
+        }
+        function deleteItem(){
+            const id = document.getElementById('idDelete').value;
+            fetch(API_URL, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: parseInt(id)})
+            })
+            .then(res => res.json())
+            .then(showResponse)
+            .catch(error => showResponse({error: error.message}));
+        }
+    </script>
+</body>
+</html>
